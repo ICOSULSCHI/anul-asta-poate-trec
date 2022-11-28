@@ -5,24 +5,32 @@ using namespace std;
 enum EventType {Movie, Concert, Football, Workshop, Theatre, Other };
 class Event
 {
-	
-	string location;
+	const int eventID;
 	char* eventName;
-	int nr_of_tickets_available; 
-	int* nr_of_seats;
+	int total_amount_of_tickets_available; 
 	EventType type;
 	bool hasSponsor;
-	static int MIN_NR_TICKETS_BOUGHT; // the minimum number of tickets to be bought in order the event to go on
+	static int MIN_NR_TICKETS_BOUGHT; // the minimum number of tickets to be bought in order to be able to go to the event
 
 };
+int MIN_NR_TICKETS_BOUGHT = 1;
+
+enum LocationArea {FrontSeats, MiddleSeats, UpperSeats};
 class Location
 {
 	const int locationID;
-	string city; // The city the event is located
-	int* nr_seats_available; // depend on the number of rows the location has
+	string* city; // The city the event is located
+	char* building_type; // The place in the city where event will have place
+	int* nr_seats; // number of seats per row
 	int nr_rows; 
+	int seat_number;
+	LocationArea area;
+	static int maximum_number_of_seat;
 
 };
+int maximum_number_of_seats = 10000;
+
+enum ParticipantCategory {Child, Student, Adult, Senior};
 
 class Participant
 {
@@ -30,17 +38,19 @@ class Participant
 	string name;
 	int age;
 	bool over18;
+	ParticipantCategory category;
 
 };
 
-enum TicketType { VIP, FrontSeat, MiddleSeat, UpperSeat };
+enum TicketType { General, VIP };
 
 class Ticket
 {
 	const int TicketID ;
-	bool boughtOnline; // is it bought online or not
+	bool validTicket; // is it valid or not
 	int nr_of_agents; // number of agents that worked to make the ticket
 	float price;
+	TicketType type;
 };
 
 

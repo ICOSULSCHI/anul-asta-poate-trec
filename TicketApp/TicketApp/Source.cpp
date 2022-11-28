@@ -1,10 +1,5 @@
 #include <iostream>
 #include <string.h>
-#include<fstream>
-#include<map>
-#include<set>
-#include<vector>
-#include<list>
 using namespace std;
 
 enum EventType {Movie, Concert, Football, Workshop, Theater, Other };
@@ -32,7 +27,7 @@ public:
 		cout << "Calling the alone wolf" << endl;
 	}
 	// Constructor with all parameters
-	Event( int eventID, char* eventName, char date_time[150], int total_amount_of_tickets_available, EventType type, bool hasSponsor, int duration): eventID(eventID)
+	Event( int eventID, char* eventName, char date_time[150], int total_amount_of_tickets_available, EventType type, bool hasSponsor, int duration):eventID(eventID)
 	{
 		if (this->eventName != nullptr)
 		{
@@ -46,6 +41,19 @@ public:
 		this->type = type;
 		this->hasSponsor = hasSponsor;
 		this->duration = duration;
+
+	}
+	// Copy constructor
+	Event(Event& e) : eventID(e.eventID), type(e.type), hasSponsor(e.hasSponsor), duration(e.duration)
+	{
+		{	if (this->eventName != nullptr)
+			delete[] this->eventName;
+		}
+		this->eventName = new char[strlen(e.eventName) + 1];
+		strcpy_s(this->eventName, strlen(e.eventName) + 1, e.eventName);
+
+		strcpy_s(this->date_time, strlen(e.date_time) + 1, e.date_time);
+
 
 	}
 
@@ -99,6 +107,8 @@ public:
 	{
 
 	}
+	// Constructor with one parameter
+	
 
 };
 int MIN_NR_OF_PART = 1;
@@ -128,7 +138,7 @@ int MIN_NUMBER_OF_TICKETS = 1;
 int main ()
 {
 	Event l1;
-	Event l2(123);
-	Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90);
+	Event l2 (10);
+	//Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90);
 	return 0;
 }

@@ -13,7 +13,7 @@ private:
 	EventType type;
 	bool hasSponsor;
 	int duration; // how much time the event will take place in minutes
-	static int MAX_NUMBER_OF_EVENTS_TO_ATTEND_ONE_EVENING; 
+	static int MAX_NUMBER_OF_TICKETS_AVAILABLE; 
 public:
 	// Default constructor
 	Event() : eventID(0), eventName(nullptr), date_time("Unknown"), total_amount_of_tickets_available(0), type(Other), hasSponsor(false), duration(0)
@@ -24,42 +24,90 @@ public:
 	// Constructor with one parameter 
 	Event( int eventID): eventID(eventID), eventName(nullptr), date_time("Unknown"), total_amount_of_tickets_available(0), type(Other), hasSponsor(false), duration(0)
 	{
-		cout << "Calling the alone wolf" << endl;
+		cout << "Calling the wolf alone" << endl;
 	}
-	// Constructor with all parameters
-	Event( int eventID, char* eventName, char date_time[150], int total_amount_of_tickets_available, EventType type, bool hasSponsor, int duration):eventID(eventID)
+	
+ // SETTERS AND GETTERS
+ 
+	const int getID()
+	{
+		return this->eventID;
+	}
+	char* getEventName()
+	{
+		return this->eventName;
+	}
+	void setEventName(const char* eventNameCopy)
 	{
 		if (this->eventName != nullptr)
 		{
 			delete[] this->eventName;
 		}
-		this->eventName = new char[strlen(eventName) + 1];
-		strcpy_s(this->eventName,strlen(eventName)+1, eventName);
+		this->eventName = new char[strlen(eventNameCopy) + 1];
+		strcpy_s(this->eventName, strlen(eventNameCopy) + 1, eventNameCopy);
+	}
+	void setDateAndTime(const char* newDate_Time)
+	{
+		int DateAndTimeAvailable = sizeof(this->date_time);
+		if (strlen(newDate_Time) + 1 > DateAndTimeAvailable)
+		{
+			throw exception("Date and Time are too long");
+		}
 
-		strcpy_s(this->date_time,strlen(date_time)+1, date_time);
-		this->total_amount_of_tickets_available = total_amount_of_tickets_available;
-		this->type = type;
-		this->hasSponsor = hasSponsor;
-		this->duration = duration;
+		strcpy_s(this->date_time, strlen(newDate_Time) + 1, newDate_Time);
+	}
+	void setTicketsAmount(int TicketsAmount)
+	{
+		if (this->total_amount_of_tickets_available > Event::MAX_NUMBER_OF_TICKETS_AVAILABLE)
+		{
+			throw exception(" There are no more available tickets");
+		}
+		this->total_amount_of_tickets_available = TicketsAmount;
+	}
+	/*string getEventType()
+	{
+		switch (this->type)
+		{
+		case 1:
+			EventType::Concert;
+		case 2:
+			;
+
+		}
+	}*/
+	bool hasSponsor()
+	{
+		return this->hasSponsor;
+	}
+	int getDuration()
+	{
+		return this->duration;
+	}
+	void setDuration( int x)
+	{
+		if (this->duration < 30)
+		{
+			throw " Not enough time for a decent event";
+		}
+		this->duration = x;
+	}
+
+	// Constructor with all parameters
+	Event( int eventID, const char* eventName, const char* date_time, int TicketsAmount, EventType type, bool hasSponsor, int duration):eventID(eventID), type(type), hasSponsor(true)
+	{
+		setEventName(eventName);
+		setDateAndTime(date_time);
+		setTicketsAmount(TicketsAmount);
+		setDuration(duration);
 
 	}
 	// Copy constructor
-	Event(Event& e) : eventID(e.eventID), type(e.type), hasSponsor(e.hasSponsor), duration(e.duration)
-	{
-		{	if (this->eventName != nullptr)
-			delete[] this->eventName;
-		}
-		this->eventName = new char[strlen(e.eventName) + 1];
-		strcpy_s(this->eventName, strlen(e.eventName) + 1, e.eventName);
-
-		strcpy_s(this->date_time, strlen(e.date_time) + 1, e.date_time);
-
-
-	}
+	
+	
 
 
 };
-int MAX_NUMBER_OF_EVENTS_TO_ATTEND_ONE_EVENING =1;
+int MAX_NUMBER_OF_TICKETS_AVAILABLE =10000;
 /////////////////////////////////////////////////////////////////////////////////////////////////////// Another Class //////////////////////////
 enum Areas {FrontSeats, MiddleSeats, UpperSeats};
 class Location
@@ -100,7 +148,7 @@ private:
 	bool over18;
 	ParticipantCategory category;
 	int nr_of_events_attended;
-	static int MIN_NR_OF_PART; // minimum number of participants that the event needs to take place
+	static int MIN_NAME_SIZE; 
 public:
 	// Default Constructor
 	Participant() : participantID(0), name(nullptr), age(0), over18(false), category(Child), nr_of_events_attended(0)
@@ -111,7 +159,7 @@ public:
 	
 
 };
-int MIN_NR_OF_PART = 1;
+int MIN_NAME_SIZE= 2;
 /////////////////////////////////////////////////////////////////////////////////////////////////////// Another Class //////////////////////////
 
 enum TicketType { General, VIP };
@@ -139,6 +187,6 @@ int main ()
 {
 	Event l1;
 	Event l2 (10);
-	//Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90);
+	Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90);
 	return 0;
 }

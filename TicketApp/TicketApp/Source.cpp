@@ -15,6 +15,8 @@ private:
 	int duration; // how much time the event will take place in minutes
 	static int MAX_NUMBER_OF_TICKETS_AVAILABLE; 
 public:
+
+
 	// Default constructor
 	Event() : eventID(0), eventName(nullptr), date_time("Unknown"), total_amount_of_tickets_available(0), type(Other), hasSponsor(false), duration(0)
 	{
@@ -27,16 +29,21 @@ public:
 		cout << "Calling the wolf alone" << endl;
 	}
 	
- // SETTERS AND GETTERS
  
-	const int getID()
+
+	// Constructor with all parameters
+	Event( int eventID, const char* eventName, const char* date_time, int TicketsAmount, EventType type, bool hasSponsor, int duration):eventID(eventID), type(type), hasSponsor(true)
 	{
-		return this->eventID;
+		this->setEventName(eventName);
+		this->setDateAndTime(date_time);
+		this->setTicketsAmount(TicketsAmount);
+		this->setDuration(duration);
+
 	}
-	char* getEventName()
-	{
-		return this->eventName;
-	}
+	
+	
+
+
 	void setEventName(const char* eventNameCopy)
 	{
 		if (this->eventName != nullptr)
@@ -58,53 +65,35 @@ public:
 	}
 	void setTicketsAmount(int TicketsAmount)
 	{
-		if (this->total_amount_of_tickets_available > Event::MAX_NUMBER_OF_TICKETS_AVAILABLE)
+	/*	if (this->total_amount_of_tickets_available > Event::MAX_NUMBER_OF_TICKETS_AVAILABLE)
 		{
 			throw exception(" There are no more available tickets");
-		}
+		}*/
 		this->total_amount_of_tickets_available = TicketsAmount;
 	}
-	/*string getEventType()
+	
+	void setDuration(int newDuration)
 	{
-		switch (this->type)
-		{
-		case 1:
-			EventType::Concert;
-		case 2:
-			;
-
-		}
-	}*/
-	bool hasSponsor()
-	{
-		return this->hasSponsor;
-	}
-	int getDuration()
-	{
-		return this->duration;
-	}
-	void setDuration( int x)
-	{
-		if (this->duration < 30)
+		if (this->duration < 0)
 		{
 			throw " Not enough time for a decent event";
 		}
-		this->duration = x;
+		this->duration = newDuration;
 	}
 
-	// Constructor with all parameters
-	Event( int eventID, const char* eventName, const char* date_time, int TicketsAmount, EventType type, bool hasSponsor, int duration):eventID(eventID), type(type), hasSponsor(true)
+	friend ostream& operator<< (ostream& out, Event& e)
 	{
-		setEventName(eventName);
-		setDateAndTime(date_time);
-		setTicketsAmount(TicketsAmount);
-		setDuration(duration);
+		out << "Event ID is " << e.eventID << " ," << endl
+			<< "Event Name : " << e.eventName << ", " << endl
+			<< " Date and time : " << e.date_time << " , " << endl 
+			<< "Total amount of tickets available : " << e.total_amount_of_tickets_available << " , " << endl
+			<< " Event type is : " << e.type << " , " << endl
+			<< " The event has a sponsor " << e.hasSponsor << " , " << endl
+			<< " The duration of the event is " << e.duration << " minutes." << endl;
+	
+		return out;
 
 	}
-	// Copy constructor
-	
-	
-
 
 };
 int MAX_NUMBER_OF_TICKETS_AVAILABLE =10000;
@@ -188,5 +177,6 @@ int main ()
 	Event l1;
 	Event l2 (10);
 	Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90);
+	cout << mecifotbal;
 	return 0;
 }

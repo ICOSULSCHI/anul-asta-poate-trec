@@ -40,9 +40,6 @@ public:
 		this->setDuration(duration);
 
 	}
-	
-	
-
 
 	void setEventName(const char* eventNameCopy)
 	{
@@ -92,7 +89,33 @@ public:
 			<< " The duration of the event is " << e.duration << " minutes." << endl;
 	
 		return out;
+		
+	}
+	friend istream& operator >> (istream& in, Event& v)
+	{
+		cout << "Introduce the event name : ";
+		char aux[100];
+		in.getline(aux, 100);
+		in.clear();
+		delete[] v.eventName;
+		v.eventName = new char[strlen(aux) + 1];
+		strcpy_s(v.eventName,strlen(aux)+1, aux);
 
+		cout << "Introduce the date and time : ";
+		char fax[150];
+		in.ignore();
+		in.getline(fax, 150);
+		in.clear();
+		delete[] v.date_time;
+		
+		strcpy_s(v.date_time, strlen(fax) + 1, fax);
+
+
+		cout << "Introduce the total amount of tickets available: "; in >> v.total_amount_of_tickets_available;
+		//cout << "Set the event type : "; in >> v.type;
+		cout << " Say if the event has a sponsor "; in >> v.hasSponsor;
+		cout << " Insert the duration of the event "; in >> v.duration;
+		return in;
 	}
 
 };
@@ -179,4 +202,5 @@ int main ()
 	Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90);
 	cout << mecifotbal;
 	return 0;
+
 }

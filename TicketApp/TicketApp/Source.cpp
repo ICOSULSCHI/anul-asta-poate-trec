@@ -32,15 +32,72 @@ public:
  
 
 	// Constructor with all parameters
-	Event( int eventID, const char* eventName, const char* date_time, int TicketsAmount, EventType type, bool hasSponsor, int duration):eventID(eventID), type(type), hasSponsor(true)
+	Event( int eventID, const char* eventName, const char* date_time, int TicketsAmount, EventType type, bool hasSponsor, int duration):eventID(eventID), type(type), hasSponsor(hasSponsor)
 	{
 		this->setEventName(eventName);
 		this->setDateAndTime(date_time);
 		this->setTicketsAmount(TicketsAmount);
 		this->setDuration(duration);
+		
+	}
+	// COPY CONSTRUCTOR
+	Event (const Event& copy): eventID(copy.eventID), type(copy.type), hasSponsor(copy.hasSponsor)
+	{
+		this->setEventName(copy.eventName);
+		this->setDateAndTime(copy.date_time);
+		this->setTicketsAmount(copy.total_amount_of_tickets_available);
+		this->setDuration(copy.duration);
+	}
+	// = Operator
+	
+	Event& operator= (const Event& event)
+	{
 
+		this->setEventName(event.eventName);
+		this->setDateAndTime(event.date_time);
+		this->setTicketsAmount(event.total_amount_of_tickets_available);
+		this->setDuration(event.duration);
+		this->hasSponsor = event.hasSponsor;
+		this->type = event.type;
+		return *this;
 	}
 
+
+	// GETTERs
+	const int getEventID() const 
+	{
+		return this->eventID;
+	}
+
+	const char* geteventName() const
+	{
+		return this->eventName;
+ }
+	const char* getDateandTime()const
+	{
+		return this->date_time;
+	}
+	int getTotalAmount() const
+	{
+		return this->total_amount_of_tickets_available;
+	}
+
+	bool getHasSponsor() const 
+	{ return this->hasSponsor; }
+	int getDuration() const
+	{
+		return this->duration;
+	}
+	static int getMaxNoTickets() 
+	{
+		return MAX_NUMBER_OF_TICKETS_AVAILABLE;
+	}
+	EventType getType()
+	{
+		return this->type;
+	}
+
+	// SETTERs
 	void setEventName(const char* eventNameCopy)
 	{
 		if (this->eventName != nullptr)
@@ -78,6 +135,34 @@ public:
 		this->duration = newDuration;
 	}
 
+	void setEventType(string type)
+	{
+		int i = 0;
+		if (type == "Movie")
+		{
+			i = 0;
+		}
+		if (type == "Concert")
+		{
+			i = 1;
+		}
+		if (type == "Football")
+		{
+			i = 2;
+		}
+		if (type == "Workshop")
+		{
+			i = 3;
+		}
+		if (type == "Theater")
+		{
+			i = 4;
+		}
+		if (type == "Other")
+		{
+			i = 5;
+		}
+	}
 	friend ostream& operator<< (ostream& out, Event& e)
 	{
 		out << "Event ID is " << e.eventID << " ," << endl
@@ -103,11 +188,11 @@ public:
 
 		cout << "Introduce the date and time : ";
 		char fax[150];
-		in.ignore();
+		/*in.ignore();
 		in.getline(fax, 150);
 		in.clear();
 		delete[] v.date_time;
-		
+		v.date_time = new char[strlen(fax) + 1];*/
 		strcpy_s(v.date_time, strlen(fax) + 1, fax);
 
 
@@ -116,6 +201,13 @@ public:
 		cout << " Say if the event has a sponsor "; in >> v.hasSponsor;
 		cout << " Insert the duration of the event "; in >> v.duration;
 		return in;
+	}
+	~Event()
+	{
+		if (this->eventName != nullptr)
+		{
+			delete[] this->eventName;
+		}
 	}
 
 };
@@ -197,10 +289,18 @@ int MIN_NUMBER_OF_TICKETS = 1;
 
 int main ()
 {
-	Event l1;
-	Event l2 (10);
-	Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90);
-	cout << mecifotbal;
+	Event l1;  // default constructor
+	cout << endl;
+	Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90); // constructor with all the parameters
+	cout << mecifotbal;  //  << operator
+	cout << endl;
+	l1 = mecifotbal; // = operator
+	cout << l1;
+	cout << endl << endl;
+	Event copy(mecifotbal); // Copy constructor
+	cout << copy;
+	cout << endl; 
+	cin >> l1;
 	return 0;
 
 }

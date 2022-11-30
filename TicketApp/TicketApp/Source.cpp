@@ -163,6 +163,24 @@ public:
 			i = 5;
 		}
 	}
+
+	// Overloading the ++ operator
+	Event& operator++ ()   
+	{
+		this->duration++;
+		return *this;
+	}
+
+	// Overloading the operator !
+	Event& operator! ()
+	{
+		this->hasSponsor = !this->hasSponsor;
+		return *this;
+	}
+	// 2 Generic methods ///
+	
+
+	// // Ostream operator //////
 	friend ostream& operator<< (ostream& out, Event& e)
 	{
 		out << "Event ID is " << e.eventID << " ," << endl
@@ -176,32 +194,34 @@ public:
 		return out;
 		
 	}
-	friend istream& operator >> (istream& in, Event& v)
-	{
-		cout << "Introduce the event name : ";
-		char aux[100];
-		in.getline(aux, 100);
-		in.clear();
-		delete[] v.eventName;
-		v.eventName = new char[strlen(aux) + 1];
-		strcpy_s(v.eventName,strlen(aux)+1, aux);
 
-		cout << "Introduce the date and time : ";
-		char fax[150];
-		/*in.ignore();
-		in.getline(fax, 150);
-		in.clear();
-		delete[] v.date_time;
-		v.date_time = new char[strlen(fax) + 1];*/
-		strcpy_s(v.date_time, strlen(fax) + 1, fax);
+	// istream OPERATOR // 
+	//friend istream& operator >> (istream& in, Event& v)
+	//{
+	//	cout << "Introduce the event name : ";
+	//	char aux[100];
+	//	in.getline(aux, 100);
+	//	in.clear();
+	//	delete[] v.eventName;
+	//	v.eventName = new char[strlen(aux) + 1];
+	//	strcpy_s(v.eventName,strlen(aux)+1, aux);
+
+	//	cout << "Introduce the date and time : ";
+	//	char fax[150];
+	//	/*in.ignore();
+	//	in.getline(fax, 150);
+	//	in.clear();
+	//	delete[] v.date_time;
+	//	v.date_time = new char[strlen(fax) + 1];*/
+	//	strcpy_s(v.date_time, strlen(fax) + 1, fax);
 
 
-		cout << "Introduce the total amount of tickets available: "; in >> v.total_amount_of_tickets_available;
-		//cout << "Set the event type : "; in >> v.type;
-		cout << " Say if the event has a sponsor "; in >> v.hasSponsor;
-		cout << " Insert the duration of the event "; in >> v.duration;
-		return in;
-	}
+	//	cout << "Introduce the total amount of tickets available: "; in >> v.total_amount_of_tickets_available;
+	//	//cout << "Set the event type : "; in >> v.type;
+	//	cout << " Say if the event has a sponsor "; in >> v.hasSponsor;
+	//	cout << " Insert the duration of the event "; in >> v.duration;
+	//	return in;
+	//}
 	~Event()
 	{
 		if (this->eventName != nullptr)
@@ -274,15 +294,23 @@ private:
 	const int TicketID ;
 	bool IsValid; // is it valid or not ( 
 	int nr_of_agents; // number of agents that worked to make the ticket
-	float price;
+	float* price;
+	int nr_of_tickets;
 	TicketType type;
 	static int MIN_NUMBER_OF_TICKETS; // that need to be bought in order to be able to attend an event
 public:
 	// Default constructor
-	Ticket(): TicketID(0), IsValid(false), nr_of_agents(0), price(0.0), type(General)
+	Ticket(): TicketID(0), IsValid(false), nr_of_agents(0), price(nullptr), type(General), nr_of_tickets(0)
 	{
 
 	}
+
+
+
+
+
+
+	// 2 generic methods :   the Max price of the tickets,  the total sum made from tickets
 };
 int MIN_NUMBER_OF_TICKETS = 1;
 
@@ -300,7 +328,10 @@ int main ()
 	Event copy(mecifotbal); // Copy constructor
 	cout << copy;
 	cout << endl; 
-	cin >> l1;
+	
+
+	cout << !mecifotbal;
+	
 	return 0;
 
 }

@@ -164,11 +164,10 @@ public:
 		}
 	}
 
-	// Overloading the ++ operator
-	Event& operator++ ()   
+	// Overloading the *= operator
+	void operator *=(float value)   
 	{
-		this->duration++;
-		return *this;
+		this->total_amount_of_tickets_available *= value;
 	}
 
 	// Overloading the operator !
@@ -318,6 +317,7 @@ int MIN_NUMBER_OF_TICKETS = 1;
 int main ()
 {
 	Event l1;  // default constructor
+
 	cout << endl;
 	Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90); // constructor with all the parameters
 	cout << mecifotbal;  //  << operator
@@ -329,8 +329,9 @@ int main ()
 	cout << copy;
 	cout << endl; 
 	
+	mecifotbal *= 5; cout << endl; // operator *=
 
-	cout << !mecifotbal;
+	cout << !mecifotbal;  // ! operator
 	
 	return 0;
 

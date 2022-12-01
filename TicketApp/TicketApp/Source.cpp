@@ -180,19 +180,8 @@ public:
 	
 
 	// // Ostream operator //////
-	friend ostream& operator<< (ostream& out, Event& e)
-	{
-		out << "Event ID is " << e.eventID << " ," << endl
-			<< "Event Name : " << e.eventName << ", " << endl
-			<< " Date and time : " << e.date_time << " , " << endl 
-			<< "Total amount of tickets available : " << e.total_amount_of_tickets_available << " , " << endl
-			<< " Event type is : " << e.type << " , " << endl
-			<< " The event has a sponsor " << e.hasSponsor << " , " << endl
-			<< " The duration of the event is " << e.duration << " minutes." << endl;
+	friend ostream& operator<< (ostream& out, Event& e);
 	
-		return out;
-		
-	}
 
 	// istream OPERATOR // 
 	//friend istream& operator >> (istream& in, Event& v)
@@ -231,6 +220,20 @@ public:
 
 };
 int MAX_NUMBER_OF_TICKETS_AVAILABLE =10000;
+
+ostream& operator<< (ostream& out, Event& e)
+{
+	out << "Event ID is " << e.eventID << " ," << endl
+		<< "Event Name : " << e.eventName << ", " << endl
+		<< " Date and time : " << e.date_time << " , " << endl
+		<< "Total amount of tickets available : " << e.total_amount_of_tickets_available << " , " << endl
+		<< " Event type is : " << e.type << " , " << endl
+		<< " The event has a sponsor " << e.hasSponsor << " , " << endl
+		<< " The duration of the event is " << e.duration << " minutes." << endl;
+
+	return out;
+
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////// Another Class //////////////////////////
 enum Areas {FrontSeats, MiddleSeats, UpperSeats};
 class Location
@@ -241,26 +244,29 @@ private:
 	char* building_type; // The place in the city where event will have place
 	int* nr_seats; // number of seats per row
 	int nr_rows; 
-	int seat_number;
+	/*int seat_number;*/
 	Areas area;
 	static int maximum_number_of_seat;
 public:
 	// Default Constructor
-	Location() : locationID(0), city(nullptr), building_type(nullptr), nr_seats(nullptr), nr_rows(0), seat_number(0), area(FrontSeats)
+	Location() : locationID(0), city("Unknown"), building_type(nullptr), nr_seats(nullptr), nr_rows(0) /*seat_number(0)*/, area(Areas::FrontSeats)
 	{
 		cout << " Aloha " << endl;
 	}
+
 	//Constructor with one parameter 
-	Location(const int locationID) : locationID(locationID), city(nullptr), building_type(nullptr), nr_seats(nullptr), nr_rows(0), seat_number(0), area(FrontSeats)
+	Location(const int locationID) : locationID(locationID), city("Unknown"), building_type(nullptr), nr_seats(nullptr), nr_rows(0), /*seat_number(0)*/ area(Areas::FrontSeats)
 	{
 		cout << "Calling the constructor with one parameter" << endl;
 	}
 
-	Location(int locationID, string city, const char* building_type, const int* nr_seats, int nr_rows/*, int seat_number*/, Areas area) : locationID(locationID)
+	Location(int locationID, string city, const char* building_type,  int* nr_seats, int nr_rows/*, int seat_number*/, Areas area) : locationID(locationID), area(area)
+
 	{
 		this->setTheCity(city);
 		this->setTheBuildingType(building_type);
 		this->setTheSeat(nr_seats, nr_rows);
+		
 
    }
 
@@ -280,10 +286,10 @@ public:
 	{
 		return this->nr_seats;
 	}
-	int getSeatNumber()
+	/*int getSeatNumber()
 	{
 		return this->seat_number;
-	}
+	}*/
 	Areas getArea()
 	{
 		return this->area;
@@ -292,7 +298,24 @@ public:
 	{
 		return maximum_number_of_seat;
 	}
+	void setArea(string type)
+	{
+		int i = 0;
 
+		if (type == "FrontSeats")
+		{
+			i = 0;
+		}
+		if (type == "MiddleSeats ")
+		{
+			i = 1;
+
+		}
+		if (type == "UpperSeats")
+		{
+			i = 2;
+		}
+	}
 	void setTheCity(  string City_Of_The_Event)
 	{
 		
@@ -312,7 +335,7 @@ public:
 		strcpy_s(this->building_type, strlen(newBuilding) + 1, newBuilding);
 	}
 
-	void setTheSeat( const int* newSeatNumber, int nr_rows)
+	void setTheSeat(  int* newSeatNumber, int nr_rows)
 	{
 		if (this->nr_seats != nullptr)
 		{
@@ -329,8 +352,53 @@ public:
 
 	}
 
+	Location operator+(const Location&lo)
+	{
+		Location copie(*this);
+		copie.nr_rows += lo.nr_rows;
+		return copie;
+	}
+	Location& operator ()(int val)
+	{
+		if (val > 0)
+		{
+			for (int i = 0; i < this->nr_rows; i++)
+			{
+				this->nr_seats[i] += val;
+			}
+			return *this;
+		}
+		else
+		{
+			cout << "Invalid input ! ";
+				return *this;
+		}
+	}
+
+
+	friend ostream& operator<< (ostream& out, const Location& l); 
+	
+
 };
 int maximum_number_of_seats = 10000;
+ostream& operator<< (ostream& out, const Location& l)
+{
+	out << "Location ID is: " << l.locationID << endl
+		<< " City where the location of the event is : " << l.city << endl
+		<< " The building type is : " << " , " << endl
+		<< " Locatia are : " << l.nr_rows << " randuri " << endl
+		<< " Si locuri/rand : " << endl;
+	if (l.nr_seats != nullptr)
+	{
+		for (int i = 0; i < l.nr_rows; i++)
+		{
+			out << l.nr_seats[i] << " ";
+		}
+	}
+	else
+		out << " - ";
+	return out;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////// Another Class //////////////////////////
 
@@ -390,23 +458,41 @@ int MIN_NUMBER_OF_TICKETS = 1;
 
 int main ()
 {
-	Event l1;  // default constructor
-
-	cout << endl;
-	Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90); // constructor with all the parameters
-	cout << mecifotbal;  //  << operator
-	cout << endl;
-	l1 = mecifotbal; // = operator
-	cout << l1;
-	cout << endl << endl;
-	Event copy(mecifotbal); // Copy constructor
-	cout << copy;
-	cout << endl; 
+	//// Tests for the EVENT CLASS
 	
-	mecifotbal *= 5; cout << endl; // operator *=
+	//Event l1;  // default constructor
 
-	cout << !mecifotbal;  // ! operator
+	//cout << endl;
+	//Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90); // constructor with all the parameters
+	//cout << mecifotbal;  //  << operator
+	//cout << endl;
+	//l1 = mecifotbal; // = operator
+	//cout << l1;
+	//cout << endl << endl;
+	//Event copy(mecifotbal); // Copy constructor
+	//cout << copy;
+	//cout << endl; 
+	//
+	//mecifotbal *= 5; cout << endl; // operator *=
+
+	//cout << !mecifotbal;  // ! operator
+
+	// TESTS FOR THE LOCATION CLASS
+
+	//Location e;
+	/*Location e1(10); */
+	/*cout << e1; */ 
+	//int seats[] = { 1,2,3,4,5,6,6,7,8 };
+	/*string buildings[] = { " la " , "s"};*/
 	
+//Location e2(12, "Vienna" , "Theater ", seats, 10, Areas::FrontSeats);
+//cout << e2;   //   << operator c
+//cout << endl;
+//
+//e2 + 3;  // + operator
+//cout << e2;
+//e2(1); // operator ()
+//cout << e2;
 	return 0;
 
 }

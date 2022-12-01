@@ -237,7 +237,7 @@ class Location
 {
 private:
 	const int locationID;
-	string* city; // The city the event is located
+	string city; // The city the event is located
 	char* building_type; // The place in the city where event will have place
 	int* nr_seats; // number of seats per row
 	int nr_rows; 
@@ -255,6 +255,80 @@ public:
 	{
 		cout << "Calling the constructor with one parameter" << endl;
 	}
+
+	Location(int locationID, string city, const char* building_type, const int* nr_seats, int nr_rows/*, int seat_number*/, Areas area) : locationID(locationID)
+	{
+		this->setTheCity(city);
+		this->setTheBuildingType(building_type);
+		this->setTheSeat(nr_seats, nr_rows);
+
+   }
+
+	const int getLocationID()
+	{
+		return this->locationID;
+	}
+	string getCity()
+	{
+		return this->city;
+	}
+	char* getBuildingCity()
+	{
+		return this->building_type;
+	}
+	int* getNrSeats()
+	{
+		return this->nr_seats;
+	}
+	int getSeatNumber()
+	{
+		return this->seat_number;
+	}
+	Areas getArea()
+	{
+		return this->area;
+	}
+	static int getMaxNrSeats()
+	{
+		return maximum_number_of_seat;
+	}
+
+	void setTheCity(  string City_Of_The_Event)
+	{
+		
+
+		this->city = City_Of_The_Event;
+	}
+
+	void setTheBuildingType(const char* newBuilding)
+	{
+		if (this->building_type != nullptr)
+		{
+			delete[] this->building_type;
+
+		}
+
+		this->building_type = new char[strlen(newBuilding) + 1];
+		strcpy_s(this->building_type, strlen(newBuilding) + 1, newBuilding);
+	}
+
+	void setTheSeat( const int* newSeatNumber, int nr_rows)
+	{
+		if (this->nr_seats != nullptr)
+		{
+			delete[] this->nr_seats;
+		}
+
+			this->nr_seats = new int[nr_rows];
+			for (int i = 0; i < this->nr_rows; i++)
+			{
+				this->nr_seats[i] = newSeatNumber[i];
+			}
+		
+		this->nr_rows = nr_rows;
+
+	}
+
 };
 int maximum_number_of_seats = 10000;
 

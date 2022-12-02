@@ -495,6 +495,22 @@ public:
 		if (category == "Senior")
 			i = 3;
 	}
+
+	Participant(const Participant& copy):participantID(copy.participantID), over18(copy.over18), category(copy.category)
+	{
+		this->setName(copy.name);
+		this->setAge(copy.age);
+		this->setNrEvents(copy.nr_of_events_attended);
+	}
+	Participant& operator= (const Participant& o)
+	{
+		this->setName(o.name);
+		this->setAge(o.age);
+		this->setNrEvents(o.nr_of_events_attended);
+		this->over18 = o.over18;
+		this->category = o.category;
+		return *this;
+	}
 	Participant operator++ ()
 	{
 		this->age++;
@@ -507,6 +523,7 @@ public:
 		return copy;
 	}
 	friend ostream& operator<<(ostream& out, const Participant& pa);
+	friend istream& operator>>(istream& in, Participant& pr);
 };
 int MIN_NAME_SIZE= 2;
 
@@ -519,6 +536,21 @@ ostream& operator<< (ostream& out, const Participant& pa)
 	out << "Number of events attended to: " << pa.nr_of_events_attended << endl;
 	out << " Participant category : " << pa.category << endl;
 	return out;
+}
+
+istream& operator>>(istream& in, Participant& pr)
+{
+	cout << "Introduce the name of the Participant: ";                    
+	in >> pr.name; 
+	cout << "Introduce the Participant's age : ";
+	in >> pr.age;
+	cout << "Is the Participant over 18 ? "; 
+	in >> pr.over18;
+	/*cout << "Category: ";
+	in >> pr.category;*/
+	cout << " Number of events attended to : ";
+	in >> pr.nr_of_events_attended;
+	return in;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////// Another Class //////////////////////////
 
@@ -592,8 +624,23 @@ int main ()
 
 // PARTICIPANT CLASSSSS//////////////////////////////////////////
 	Participant p1;
+	cout << endl;
 	Participant Jimmy(1, "Jimmy", 27, true, ParticipantCategory::Adult, 2);
+	cout << endl;
 	cout << Jimmy;
+	cout << endl;
+	cout << ++Jimmy; // ++ OPERATOR
+	cout << endl;
+	p1 = Jimmy;
+	cout << p1;
+	cout << endl;
+	cout << "Constructorul de copiere : " << endl;
+	Participant p2(Jimmy);
+	cout << p2;
+	cout << endl;
+
+	cin >> p2; // >> OPERATOR
+
 	return 0;
 
 }

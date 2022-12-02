@@ -375,6 +375,10 @@ public:
 		}
 	}
 
+	~Location()
+	{
+
+	}
 
 	friend ostream& operator<< (ostream& out, const Location& l); 
 	
@@ -408,23 +412,114 @@ class Participant
 {
 private:
 	const int participantID;
-	string* name;
+	string name;
 	int age;
 	bool over18;
 	ParticipantCategory category;
 	int nr_of_events_attended;
+
 	static int MIN_NAME_SIZE; 
 public:
 	// Default Constructor
-	Participant() : participantID(0), name(nullptr), age(0), over18(false), category(Child), nr_of_events_attended(0)
+	Participant() : participantID(0), name("Unknown"), age(0), over18(false), category(Child), nr_of_events_attended(0)
+	{
+		cout << "Default constructor for PARTCIPANT";
+	}
+
+	// Constructor with all the parameters
+	Participant(int participantID, string name, int age, bool over18, ParticipantCategory category, int nr_of_events_attended) : participantID(participantID), over18(over18), category(category)
+	{
+		this->setName(name);
+		this->setAge(age);
+		this->setNrEvents(nr_of_events_attended);
+	}
+	string getName()
+	{
+		return this->name;
+	}
+	void  setName(string newName)
 	{
 
+		/*if (newName.size() < Participant::MIN_NAME_SIZE)
+		{
+			throw  "The name is too short ";
+		}*/
+		this->name = newName;
 	}
-	// Constructor with one parameter
-	
 
+	int getAge()
+	{
+		return this->age;
+	}
+	void setAge(int ageCopy)
+	{
+		/*if (this->age < 0)
+		{
+			throw "Enter a valid age ";
+		}*/
+		this->age = ageCopy;
+	}
+	bool isOver()
+	{
+		return this->over18;
+	}
+	int getNrEvents()
+	{
+		return this->nr_of_events_attended;
+   }
+	void setNrEvents(int newEvent)
+	{
+		/*if (this->nr_of_events_attended < 0)
+		{
+			throw "Invalid number";
+		}*/
+		this->nr_of_events_attended = newEvent;
+	}
+	static int getMinSize()
+	{
+		return MIN_NAME_SIZE;
+	}
+	ParticipantCategory getCategory()
+	{
+		return this->category;
+	}
+	void setCategory(string category)
+	{
+		int i = 0;
+		if (category == "Adult")
+			i = 2;
+		if (category == "Child")
+			i = 0;
+		if (category == "Student")
+			i = 1;
+		if (category == "Senior")
+			i = 3;
+	}
+	Participant operator++ ()
+	{
+		this->age++;
+		return *this;
+	}
+	Participant operator-(const Participant& p)
+	{
+		Participant copy(*this);
+		copy.nr_of_events_attended -= p.nr_of_events_attended;
+		return copy;
+	}
+	friend ostream& operator<<(ostream& out, const Participant& pa);
 };
 int MIN_NAME_SIZE= 2;
+
+ostream& operator<< (ostream& out, const Participant& pa)
+{
+	out << "Participant ID is: " << pa.participantID << endl;
+	out << "Name: " << pa.name << endl;
+	out << "Age: " << pa.age << endl;
+	out << "Is over 18 ? : " << pa.over18 << endl;
+	out << "Number of events attended to: " << pa.nr_of_events_attended << endl;
+	out << " Participant category : " << pa.category << endl;
+	return out;
+}
 /////////////////////////////////////////////////////////////////////////////////////////////////////// Another Class //////////////////////////
 
 enum TicketType { General, VIP };
@@ -493,6 +588,12 @@ int main ()
 //cout << e2;
 //e2(1); // operator ()
 //cout << e2;
+
+
+// PARTICIPANT CLASSSSS//////////////////////////////////////////
+	Participant p1;
+	Participant Jimmy(1, "Jimmy", 27, true, ParticipantCategory::Adult, 2);
+	cout << Jimmy;
 	return 0;
 
 }

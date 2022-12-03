@@ -91,10 +91,10 @@ public:
 	{
 		return MAX_NUMBER_OF_TICKETS_AVAILABLE;
 	}
-	EventType getType()
+	/*EventType getType()
 	{
 		return this->type;
-	}
+	}*/
 
 	// SETTERs
 	void setEventName(const char* eventNameCopy)
@@ -134,32 +134,20 @@ public:
 		this->duration = newDuration;
 	}
 
-	void setEventType(string type)
+	string setEventType()
 	{
-		int i = 0;
-		if (type == "Movie")
+		switch (this->type)
 		{
-			i = 0;
-		}
-		if (type == "Concert")
-		{
-			i = 1;
-		}
-		if (type == "Football")
-		{
-			i = 2;
-		}
-		if (type == "Workshop")
-		{
-			i = 3;
-		}
-		if (type == "Theater")
-		{
-			i = 4;
-		}
-		if (type == "Other")
-		{
-			i = 5;
+		case EventType::Concert:
+			return "Concert";
+		case EventType::Movie:
+			return "Movie";
+		case EventType::Theater:
+			return "Theater";
+		case EventType::Football:
+			return "Ftoball";
+		case EventType::Other:
+			return "Other";
 		}
 	}
 
@@ -297,22 +285,17 @@ public:
 	{
 		return maximum_number_of_seat;
 	}
-	void setArea(string type)
+	string setArea()
 	{
-		int i = 0;
-
-		if (type == "FrontSeats")
+		switch (this->area)
 		{
-			i = 0;
-		}
-		if (type == "MiddleSeats ")
-		{
-			i = 1;
-
-		}
-		if (type == "UpperSeats")
-		{
-			i = 2;
+		case Areas::FrontSeats:
+			return "FrontSeats";
+		case Areas::MiddleSeats:
+			return "MiddleSeats";
+		case Areas::UpperSeats:
+			return "UpperSeats";
+		
 		}
 	}
 	void setTheCity(  string City_Of_The_Event)
@@ -482,17 +465,20 @@ public:
 	{
 		return this->category;
 	}
-	void setCategory(string category)
+	string setCategory()
 	{
-		int i = 0;
-		if (category == "Adult")
-			i = 2;
-		if (category == "Child")
-			i = 0;
-		if (category == "Student")
-			i = 1;
-		if (category == "Senior")
-			i = 3;
+		switch (this->category)
+		{
+		case ParticipantCategory::Adult:
+			return "Adult";
+		case ParticipantCategory::Child:
+			return "Child";
+		case ParticipantCategory::Student:
+			return "Student";
+		case ParticipantCategory::Senior:
+			return "Senior";
+
+		}
 	}
 
 	Participant(const Participant& copy):participantID(copy.participantID), over18(copy.over18), category(copy.category)
@@ -582,26 +568,26 @@ public:
 int MIN_NUMBER_OF_TICKETS = 1;
 
 
-//int main ()
-//{
+int main ()
+{
 //	//// Tests for the EVENT CLASS
-//	
-//	//Event l1;  // default constructor
-//
-//	//cout << endl;
-//	//Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90); // constructor with all the parameters
-//	//cout << mecifotbal;  //  << operator
-//	//cout << endl;
-//	//l1 = mecifotbal; // = operator
-//	//cout << l1;
-//	//cout << endl << endl;
-//	//Event copy(mecifotbal); // Copy constructor
-//	//cout << copy;
-//	//cout << endl; 
-//	//
-//	//mecifotbal *= 5; cout << endl; // operator *=
-//
-//	//cout << !mecifotbal;  // ! operator
+	
+	Event l1;  // default constructor
+
+	cout << endl;
+	Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90); // constructor with all the parameters
+	cout << mecifotbal;  //  << operator
+	cout << endl;
+	l1 = mecifotbal; // = operator
+	cout << l1;
+	cout << endl << endl;
+	Event copy(mecifotbal); // Copy constructor
+	cout << copy;
+	cout << endl; 
+	
+	mecifotbal *= 5; cout << endl; // operator *=
+
+	cout << !mecifotbal;  // ! operator
 //
 //	// TESTS FOR THE LOCATION CLASS
 //
@@ -640,6 +626,6 @@ int MIN_NUMBER_OF_TICKETS = 1;
 //
 //	//cin >> p2; // >> OPERATOR
 //
-//	return 0;
+	return 0;
 //
-//}
+}

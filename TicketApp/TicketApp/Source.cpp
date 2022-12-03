@@ -167,36 +167,9 @@ public:
 	
 
 	// // Ostream operator //////
-	friend ostream& operator<< (ostream& out, Event& e);
+	friend ostream& operator<< (ostream& out, const Event& e);
+	friend istream& operator>> (istream& in, Event& v);
 	
-
-	// istream OPERATOR // 
-	//friend istream& operator >> (istream& in, Event& v)
-	//{
-	//	cout << "Introduce the event name : ";
-	//	char aux[100];
-	//	in.getline(aux, 100);
-	//	in.clear();
-	//	delete[] v.eventName;
-	//	v.eventName = new char[strlen(aux) + 1];
-	//	strcpy_s(v.eventName,strlen(aux)+1, aux);
-
-	//	cout << "Introduce the date and time : ";
-	//	char fax[150];
-	//	/*in.ignore();
-	//	in.getline(fax, 150);
-	//	in.clear();
-	//	delete[] v.date_time;
-	//	v.date_time = new char[strlen(fax) + 1];*/
-	//	strcpy_s(v.date_time, strlen(fax) + 1, fax);
-
-
-	//	cout << "Introduce the total amount of tickets available: "; in >> v.total_amount_of_tickets_available;
-	//	//cout << "Set the event type : "; in >> v.type;
-	//	cout << " Say if the event has a sponsor "; in >> v.hasSponsor;
-	//	cout << " Insert the duration of the event "; in >> v.duration;
-	//	return in;
-	//}
 	~Event()
 	{
 		if (this->eventName != nullptr)
@@ -206,9 +179,9 @@ public:
 	}
 
 };
-int MAX_NUMBER_OF_TICKETS_AVAILABLE =10000;
+int MAX_NUMBER_OF_TICKETS_AVAILABLE =50000;
 
-ostream& operator<< (ostream& out, Event& e)
+ostream& operator<< (ostream& out, const Event& e)
 {
 	out << "Event ID is " << e.eventID << " ," << endl
 		<< "Event Name : " << e.eventName << ", " << endl
@@ -220,6 +193,32 @@ ostream& operator<< (ostream& out, Event& e)
 
 	return out;
 
+}
+istream& operator>>(istream& in,  Event& v)
+{
+	cout << "Introduce the event name : ";
+	char aux[100];
+	in.getline(aux, 100);
+	in.clear();
+	delete[] v.eventName;
+	v.eventName = new char[strlen(aux) + 1];
+	strcpy_s(v.eventName, strlen(aux) + 1, aux);
+
+	cout << "Introduce the date and time : ";
+	char fax[150];
+	/*in.ignore();
+	in.getline(fax, 150);
+	in.clear();
+	delete[] v.date_time;
+	v.date_time = new char[strlen(fax) + 1];*/
+	strcpy_s(v.date_time, strlen(fax) + 1, fax);
+
+
+	cout << "Introduce the total amount of tickets available: "; in >> v.total_amount_of_tickets_available;
+	//cout << "Set the event type : "; in >> v.type;
+	cout << " Say if the event has a sponsor "; in >> v.hasSponsor;
+	cout << " Insert the duration of the event "; in >> v.duration;
+	return in;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////// Another Class //////////////////////////
 enum Areas {FrontSeats, MiddleSeats, UpperSeats};
@@ -247,6 +246,7 @@ public:
 		cout << "Calling the constructor with one parameter" << endl;
 	}
 
+	// CONSTRUCTOR WITH ALL THE PARAMETERS
 	Location(int locationID, string city, const char* building_type,  int* nr_seats, int nr_rows/*, int seat_number*/, Areas area) : locationID(locationID), area(area)
 
 	{
@@ -256,6 +256,27 @@ public:
 		
 
    }
+	// COPY CONSTRUCTOR 
+	Location(const Location& c) : locationID(c.locationID), area(c.area)
+	{
+		this->setTheCity(c.city);
+		this->setTheBuildingType(c.building_type);
+		this->setTheSeat(c.nr_seats, c.nr_rows);
+
+	}
+	//OPERATOR=
+	
+	Location operator=(const Location& c)
+	{
+		this->area = c.area;
+		this->setTheCity(c.city);
+		this->setTheBuildingType(c.building_type);
+		this->setTheSeat(c.nr_seats, c.nr_rows);
+
+
+	}
+
+	// GETTERS
 
 	const int getLocationID()
 	{
@@ -298,6 +319,9 @@ public:
 		
 		}
 	}
+	
+	// SETTERS //
+
 	void setTheCity(  string City_Of_The_Event)
 	{
 		
@@ -334,6 +358,12 @@ public:
 
 	}
 
+	// 2 generic methods ////
+	
+	
+	
+	// 2 OPERATORS 
+
 	Location operator+(const Location&lo)
 	{
 		Location copie(*this);
@@ -359,11 +389,18 @@ public:
 
 	~Location()
 	{
-
+		if(this->building_type != nullptr)
+		{
+			delete[] this->building_type;
+		}
+		if (this->nr_seats != nullptr)
+		{
+			delete[] this->nr_seats;
+		}
 	}
 
 	friend ostream& operator<< (ostream& out, const Location& l); 
-	
+	friend istream& operator>> (istream& in, Location& l);
 
 };
 int maximum_number_of_seats = 10000;
@@ -384,6 +421,29 @@ ostream& operator<< (ostream& out, const Location& l)
 	else
 		out << " - ";
 	return out;
+}
+istream& operator>> (istream& in, Location& l)
+{
+	cout << endl;
+	cout << "Introduce the city : " << endl;
+	in >> l.city;
+	cout << "The building type is : " << endl;
+	char aux[100];
+	in.getline(aux, 100);
+	in.clear();
+	delete[] l.building_type;
+	l.building_type = new char[strlen(aux) + 1]; 
+	strcpy_s(l.building_type,strlen(aux) +1, aux);
+	cout << "Introduce the nr of rows : " << endl; in >> l.nr_rows; 
+	cout << " Introduce the nr of seats : " << endl;
+	delete [] l.nr_seats;
+	l.nr_seats = new int[l.nr_rows];
+	for (int i = 0; i < l.nr_rows; i++)
+	{
+		cout << " \t Number of seats per row nr -> " << i + 1 << " : "; in >> l.nr_seats[i];
+	}
+
+	return in;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////// Another Class //////////////////////////
@@ -415,6 +475,7 @@ public:
 		this->setAge(age);
 		this->setNrEvents(nr_of_events_attended);
 	}
+	 // GETTERS AND SETTERS
 	string getName()
 	{
 		return this->name;
@@ -480,13 +541,15 @@ public:
 
 		}
 	}
-
+	// COPY CONSTRUCTOR /////////////
 	Participant(const Participant& copy):participantID(copy.participantID), over18(copy.over18), category(copy.category)
 	{
 		this->setName(copy.name);
 		this->setAge(copy.age);
 		this->setNrEvents(copy.nr_of_events_attended);
 	}
+
+	// OPERATOR= /////////////////////
 	Participant& operator= (const Participant& o)
 	{
 		this->setName(o.name);
@@ -496,6 +559,8 @@ public:
 		this->category = o.category;
 		return *this;
 	}
+
+	// 2 OPERATORS 
 	Participant operator++ ()
 	{
 		this->age++;
@@ -509,6 +574,8 @@ public:
 	}
 	friend ostream& operator<<(ostream& out, const Participant& pa);
 	friend istream& operator>>(istream& in, Participant& pr);
+
+	
 };
 int MIN_NAME_SIZE= 2;
 
@@ -555,9 +622,62 @@ public:
 	// Default constructor
 	Ticket(): TicketID(0), IsValid(false), nr_of_agents(0), price(nullptr), type(General), nr_of_tickets(0)
 	{
-
+		cout << " Default constructor called ";
+	}
+	Ticket(float* newPrice, int nr_of_tickets) :TicketID(0), IsValid(false), nr_of_agents(1), type(General)
+	{
+		if (this->price != nullptr)
+		{
+			delete[] this->price;
+		}
+		this->price = new float[nr_of_tickets]; 
+		for (int i = 0; i < nr_of_tickets; i++)
+		{
+			this->price[i] = newPrice[i];
+		}
+		this->nr_of_tickets = nr_of_tickets;
 	}
 
+	// COPY CONSTRUCTOR
+
+	Ticket(const Ticket& t): TicketID(t.TicketID), IsValid(t.IsValid), nr_of_agents(t.nr_of_agents), type(t.type)
+	{
+		if (this->price != nullptr)
+		{
+			delete[] this->price;
+		}
+		this->price = new float[t.nr_of_tickets];
+		for (int i = 0; i < t.nr_of_tickets; i++)
+		{
+			this->price[i] = t.price[i];
+		}
+		this->nr_of_tickets = t.nr_of_tickets;
+	}
+	//OPERATOR = 
+	Ticket operator= (const Ticket& t)
+	{
+		if (this->price != nullptr)
+		{
+			delete[] this->price;
+		}
+		this->price = new float[t.nr_of_tickets];
+		for (int i = 0; i < t.nr_of_tickets; i++)
+		{
+			this->price[i] = t.price[i];
+		}
+		this->nr_of_tickets = t.nr_of_tickets;
+		this->IsValid = t.IsValid;
+		this->nr_of_agents = t.nr_of_agents;
+		this->type = t.type;
+	}
+
+	~Ticket()
+	{
+		if (this->price != nullptr)
+		{
+			delete[] this->price;
+		}
+	}
 
 
 
@@ -572,60 +692,62 @@ int main ()
 {
 //	//// Tests for the EVENT CLASS
 	
-	Event l1;  // default constructor
+	//Event l1;  // default constructor
 
-	cout << endl;
-	Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90); // constructor with all the parameters
-	cout << mecifotbal;  //  << operator
-	cout << endl;
-	l1 = mecifotbal; // = operator
-	cout << l1;
-	cout << endl << endl;
-	Event copy(mecifotbal); // Copy constructor
-	cout << copy;
-	cout << endl; 
-	
-	mecifotbal *= 5; cout << endl; // operator *=
+	//cout << endl;
+	//Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90); // constructor with all the parameters
+	//cout << mecifotbal;  //  << operator
+	//cout << endl;
+	//l1 = mecifotbal; // = operator
+	//cout << l1;
+	//cout << endl << endl;
+	//Event copy(mecifotbal); // Copy constructor
+	//cout << copy;
+	//cout << endl; 
+	//
+	//mecifotbal *= 5; cout << endl; // operator *=
 
-	cout << !mecifotbal;  // ! operator
-//
+	//cout << !mecifotbal;  // ! operator
+	//cin >> mecifotbal;
 //	// TESTS FOR THE LOCATION CLASS
 //
-////	Location e;
-////	/*Location e1(10); */
-////	/*cout << e1; */ 
-////	int seats[] = { 1,2,3,4,5,6,6,7,8 };
-////	/*string buildings[] = { " la " , "s"};*/
-////	
-////Location e2(12, "Vienna" , "Theater ", seats, 10, Areas::FrontSeats);
-////cout << e2;   //   << operator c
-////cout << endl;
-////
-////e2 + 3;  // + operator
-////cout << e2;
-////e2(1); // operator ()
-////cout << e2;
-//
+//	Location e;
+//	/*Location e1(10); */
+//	/*cout << e1; */ 
+//	int seats[] = { 1,2,3,4,5,6,6,7,8 };
+//	/*string buildings[] = { " la " , "s"};*/
+//	
+//Location e2(12, "Vienna" , "Theater ", seats, 10, Areas::FrontSeats);
+//cout << e2;   //   << operator c
+//cout << endl;
+//cin >> e2;
+
+//e2 + 3;  // + operator
+//cout << e2;
+//e2(1); // operator ()
+//cout << e2;
+
 //
 //// PARTICIPANT CLASSSSS//////////////////////////////////////////
-//	//Participant p1;
-//	//cout << endl;
-//	//Participant Jimmy(1, "Jimmy", 27, true, ParticipantCategory::Adult, 2);
-//	//cout << endl;
-//	//cout << Jimmy;
-//	//cout << endl;
-//	//cout << ++Jimmy; // ++ OPERATOR
-//	//cout << endl;
-//	//p1 = Jimmy;
-//	//cout << p1;
-//	//cout << endl;
-//	//cout << "Constructorul de copiere : " << endl;
-//	//Participant p2(Jimmy);
-//	//cout << p2;
-//	//cout << endl;
-//
-//	//cin >> p2; // >> OPERATOR
-//
+
+	//Participant p1;
+	//cout << endl;
+	//Participant Jimmy(1, "Jimmy", 27, true, ParticipantCategory::Adult, 2);
+	//cout << endl;
+	//cout << Jimmy;
+	//cout << endl;
+	//cout << ++Jimmy; // ++ OPERATOR
+	//cout << endl;
+	//p1 = Jimmy;
+	//cout << p1;
+	//cout << endl;
+	//cout << "Constructorul de copiere : " << endl;
+	//Participant p2(Jimmy);
+	//cout << p2;
+	//cout << endl;
+
+	//cin >> p2; // >> OPERATOR
+
 	return 0;
 //
 }

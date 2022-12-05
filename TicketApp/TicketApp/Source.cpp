@@ -370,21 +370,18 @@ public:
 		copie.nr_rows += lo.nr_rows;
 		return copie;
 	}
-	Location& operator ()(int val)
+	bool operator== (const Location& l)
 	{
-		if (val > 0)
+		bool egal = true;
+		for (int i = 0; i < this->nr_rows; i++)
 		{
-			for (int i = 0; i < this->nr_rows; i++)
+			if (this->nr_seats[i] != l.nr_seats[i])
 			{
-				this->nr_seats[i] += val;
+				egal = false;
 			}
-			return *this;
 		}
-		else
-		{
-			cout << "Invalid input ! ";
-				return *this;
-		}
+		return this->building_type == l.building_type; 
+		
 	}
 
 	~Location()
@@ -566,11 +563,15 @@ public:
 		this->age++;
 		return *this;
 	}
-	Participant operator-(const Participant& p)
+	Participant operator++(int)
 	{
-		Participant copy(*this);
-		copy.nr_of_events_attended -= p.nr_of_events_attended;
+		Participant copy = *this;
+		this->age++;
 		return copy;
+	}
+	operator string()
+	{
+		return this->name;
 	}
 	friend ostream& operator<<(ostream& out, const Participant& pa);
 	friend istream& operator>>(istream& in, Participant& pr);
@@ -671,22 +672,189 @@ public:
 		this->type = t.type;
 	}
 
-	~Ticket()
+
+	// GETTERS
+	const int getID()
+	{
+		return this->TicketID;
+	}
+	bool isValid()
+	{
+		return this->IsValid;
+	}
+	int getNrAgents()
+	{
+		return this->nr_of_agents;
+	}
+	int getnrTickets()
+	{
+		return this->nr_of_tickets;
+	}
+	float* getPrices()
+	{
+		return this->price;
+	}
+	TicketType getType()
+	{
+		return this->type;
+	}
+	static int getMinimumNr()
+	{
+		return MIN_NUMBER_OF_TICKETS;
+	}
+
+	// SETTERS
+
+	void setIfValid(bool is)
+	{
+		is = false;
+		if (this->IsValid == true)
+			is == true;
+		else
+			is == false;
+	}
+	void setNrAgents(int nr)
+	{
+		if (this->nr_of_agents > 0)
+			this->nr_of_agents = nr;
+		else
+			throw "Try again";
+	}
+	string setType()
+	{
+		switch (this->type)
+		{
+		case TicketType::General:
+			return "General";
+		case TicketType::VIP:
+			return "VIP";
+		}
+			
+	}
+	void setPrice(float* newPrice, int otherNR)
 	{
 		if (this->price != nullptr)
 		{
 			delete[] this->price;
 		}
+		this->price = new float[otherNR];
+		for (int i = 0; i < otherNR; i++)
+		{
+			this->price[i] = newPrice[i];
+		}
+		this->nr_of_tickets = otherNR;
+	}
+
+
+	
+
+
+	// 2 OVERLOADED OPERATORS
+
+	float operator[](int index)
+	{
+		if (index >= 0 && index < this->nr_of_tickets)
+		{
+			return this->price[index];
+		}
+		else
+		{
+			throw  " Invalid index";
+		}
+	}
+
+	explicit operator int()
+	{
+		return this->nr_of_agents;
+	}
+
+
+	// 2 GENERIC METHODS 
+
+	// Total Revenue
+	void TotalRevenue( float* prices)
+	{
+		
+		float sum = 0;
+		for (int i = 0; i < this->nr_of_tickets; i++)
+		{ 
+			sum += prices[i];
+		}
+		cout << "Total Revenue for the sold tickets : " << sum;
+
+
+		
+	}
+
+	// Average price for a ticket
+	void AveragePriceForATicket(float* prices)
+	{
+		float average = 0;
+		float sum = 0;
+		for (int i = 0; i < this->nr_of_tickets; i++)
+		{
+			sum += prices[i];
+		}
+		cout << "Average price for a ticket: " << sum / nr_of_tickets;
+		
+	}
+
+	~Ticket()
+	{
+		if (this->price != nullptr)
+			{
+				cout << " Call the destructor " << endl;
+				delete[] this->price;
+			}
 	}
 
 
 
+	friend istream& operator>> (istream& in, Ticket& t);
+	friend ostream& operator<< (ostream& out, Ticket& t);
 
 
-	// 2 generic methods :   the Max price of the tickets,  the total sum made from tickets
+
+	
 };
 int MIN_NUMBER_OF_TICKETS = 1;
 
+ostream& operator<< (ostream& out, Ticket& t)
+{
+	out << "Ticket ID: " << t.TicketID << endl;
+	out << "Is Valid  ( 1 for Yes, 0 for No): " << t.IsValid << endl;
+	out << "Number of agents that worked for the ticket: " << t.nr_of_agents << endl;
+	out << "Ticket type: " << t.type << endl;
+	out << "Number of tickets sold: " << t.nr_of_tickets << endl;
+	for (int i = 0; i < t.nr_of_tickets; i++)
+	{
+		out << "Price for the ticket nr" << i + 1 << " : " << t.price[i] << endl;
+
+	}
+
+	return out;
+	}
+istream& operator>> (istream& in, Ticket& t)
+{
+	cout << "Introduce the number of agents that  worked on a ticket : "; 
+	in >> t.nr_of_agents; cout << endl;
+	cout << "Is Valid ( 1 for YES, 0 for NO ) ? : " << endl;
+
+	in >> t.IsValid;
+	
+	cout << " NR of tickets : " << endl;
+	in >> t.nr_of_tickets;
+	
+	delete[] t.price;
+	t.price = new float[t.nr_of_tickets];
+	for (int i = 0; i < t.nr_of_tickets; i++)
+	{
+		cout << "Price for the ";
+		cout << "ticket nr " << i + 1 << " : ";
+		in >> t.price[i];
+	}
+	return in;
+}
 
 int main ()
 {
@@ -724,7 +892,10 @@ int main ()
 
 //e2 + 3;  // + operator
 //cout << e2;
-//e2(1); // operator ()
+// if (e==e2) 
+// 	   {
+// 	   cout << "e si e2 sunt egali "  << endl;
+// 	   }
 //cout << e2;
 
 //
@@ -737,6 +908,8 @@ int main ()
 	//cout << Jimmy;
 	//cout << endl;
 	//cout << ++Jimmy; // ++ OPERATOR
+	//cout << Jimmy++; // Operator ++
+	//cout << " Name of the participant is :  " << (string)Jimmy << endl;  // operator string
 	//cout << endl;
 	//p1 = Jimmy;
 	//cout << p1;
@@ -748,6 +921,21 @@ int main ()
 
 	//cin >> p2; // >> OPERATOR
 
+// TICKET CLASS /////////////////////////////////////////
+
+	Ticket t1;
+	float Prices[] = {4.2 , 2.3, 10.2};
+	Ticket t2(Prices, 3); cout << endl;
+	cout << t2;
+	cout << endl;
+	t2.TotalRevenue(Prices);
+	cout << endl;
+	t2.AveragePriceForATicket(Prices);
+	cout << t2[2]; // [] operator
+	cout << endl;
+	cout << "Nr of agents that worked for a ticket " << (int)t2 << endl;  // operator int()
+	cin >> t2; // operator >>
+	
 	return 0;
 //
 }

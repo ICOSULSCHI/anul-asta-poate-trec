@@ -76,9 +76,26 @@
 //
 //
 //
-//
-//	// TICKET CLASS /////////////////////////////////////////////////////
-//
-//
+
+
+
+
+
+
+// WORKS!
+// TICKET CLASS /////////////////////////////////////////
+
+//Ticket t1;
+//float Prices[] = { 4.2 , 2.3, 10.2 };
+//Ticket t2(Prices, 3); cout << endl;
+//cout << t2;
+//cout << endl;
+//t2.TotalRevenue(Prices);
+//cout << endl;
+//t2.AveragePriceForATicket(Prices);
+//cout << t2[2]; // [] operator
+//cout << endl;
+//cout << "Nr of agents that worked for a ticket " << (int)t2 << endl;  // operator int()
+//cin >> t2; // operator >>
 //	return 0;
 //}

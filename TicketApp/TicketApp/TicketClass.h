@@ -217,6 +217,7 @@ public:
 };
 int MIN_NUMBER_OF_TICKETS = 1;
 
+
 ostream& operator<< (ostream& out, Ticket& t)
 {
 	out << "Ticket ID: " << t.TicketID << endl;

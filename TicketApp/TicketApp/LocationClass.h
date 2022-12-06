@@ -285,6 +285,7 @@ ostream& operator<< (ostream& out, const Location& l)
 		}
 	}
 	else
+
 		out << " - ";
 	return out;
 }

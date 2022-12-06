@@ -11,6 +11,7 @@ int main()
 
 	Event l1;  // default constructor
 
+
 	cout << endl;
 	Event mecifotbal(123, " Real Madrid vs Barcelona", "15 decembrie 2022, ora 22:00", 10000, EventType::Football, true, 90); // constructor with all the parameters
 	cout << mecifotbal;  //  << operator

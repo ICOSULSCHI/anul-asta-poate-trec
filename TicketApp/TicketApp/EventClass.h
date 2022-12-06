@@ -203,6 +203,7 @@ istream& operator>>(istream& in, Event& v)
 	char aux[100];
 	in.getline(aux, 100);
 	in.clear();
+
 	delete[] v.eventName;
 	v.eventName = new char[strlen(aux) + 1];
 	strcpy_s(v.eventName, strlen(aux) + 1, aux);

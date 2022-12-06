@@ -159,6 +159,7 @@ ostream& operator<< (ostream& out, const Participant& pa)
 	out << "Is over 18 ? : " << pa.over18 << endl;
 	out << "Number of events attended to: " << pa.nr_of_events_attended << endl;
 	out << " Participant category : " << pa.category << endl;
+
 	return out;
 }
 

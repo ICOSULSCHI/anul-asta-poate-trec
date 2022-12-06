@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string.h>
 using namespace std;
-
 enum EventType {Movie, Concert, Football, Workshop, Theater, Other };
 class Event
 {
@@ -242,18 +241,39 @@ public:
 	}
 
 	// CONSTRUCTOR WITH ALL THE PARAMETERS
-	Location(int locationID, string city, const char* building_type,  int* nr_seats, int nr_rows/*, int seat_number*/, Areas area) : locationID(locationID), area(area)
+	Location(int locationID, string city, const char* building_type,  int* nr_seats, int nr_rows/*, int seat_number*/, Areas area) : locationID(locationID)
 
 	{
-		this->setTheCity(city);
-		this->setTheBuildingType(building_type);
-		this->setTheSeat(nr_seats, nr_rows);
+		this->area = area;
+		this->city = city;
+		if (this->building_type != nullptr)
+		{
+			delete[] this->building_type;
+
+		}
+
+		this->building_type = new char[strlen(building_type) + 1];
+		strcpy_s(this->building_type, strlen(building_type) + 1, building_type);
+
+		if (this->nr_seats != nullptr)
+		{
+			delete[] this->nr_seats;
+		}
+
+		this->nr_seats = new int[nr_rows];
+		for (int i = 0; i < nr_rows; i++)
+		{
+			this->nr_seats[i] = nr_seats[i];
+		}
+
+		this->nr_rows = nr_rows;
 		
 
    }
 	// COPY CONSTRUCTOR 
 	Location(const Location& c) : locationID(c.locationID), area(c.area)
 	{
+		this->city = c.city;
 		if (this->building_type != nullptr)
 		{
 			delete[] this->building_type;
@@ -281,6 +301,7 @@ public:
 	
 	Location operator=(const Location& c)
 	{
+		this->city = c.city;
 		this->area = c.area;
 		if (this->building_type != nullptr)
 		{
@@ -304,8 +325,11 @@ public:
 
 		this->nr_rows = c.nr_rows;
 
+		return *this;
 
 	}
+
+	
 
 	// GETTERS
 
@@ -390,17 +414,41 @@ public:
 	}
 
 	// 2 generic methods ////
-	
-	
+	// Count the number of seats
+	char* toUpperCase(const char* text)
+	{
+		int size = strlen(text); 
+		char* newText = new char[size];
+		bool allowCap = true;
+		for (int i = 0; i < size; i++)
+		{
+			if (allowCap == true)
+			{
+				newText[i] = text[i] - 32;
+				allowCap = false;
+		 }
+			else
+			{
+				newText[i] = text[i];
+			}
+			if (text[i] == ' ')
+			{
+				allowCap = true;
+			}
+		}
+		return newText;
+	}
+
+
 	
 	// 2 OPERATORS 
 
-	/*Location operator+(const Location&lo)
+
+	bool operator> (const Location& l)
 	{
-		Location copie(*this);
-		copie.nr_rows += lo.nr_rows;
-		return copie;
-	}*/
+		return this->nr_rows > l.nr_rows;
+	}
+
 	bool operator== (const Location& l)
 	{
 		bool egal = true;
@@ -414,6 +462,8 @@ public:
 		return this->building_type == l.building_type; 
 		
 	}
+
+
 
 	~Location()
 	{
@@ -436,7 +486,7 @@ ostream& operator<< (ostream& out, const Location& l)
 {
 	out << "Location ID is: " << l.locationID << endl
 		<< " City where the location of the event is : " << l.city << endl
-		<< " The building type is : " << " , " << endl
+		<< endl << (l.building_type != nullptr ? "Building Type: " + string(l.building_type) : "No specific type") << endl
 		<< " Locatia are : " << l.nr_rows << " randuri " << endl
 		<< " Si locuri/rand : " << endl;
 	if (l.nr_seats != nullptr)
@@ -719,6 +769,8 @@ public:
 		this->IsValid = t.IsValid;
 		this->nr_of_agents = t.nr_of_agents;
 		this->type = t.type;
+		return *this;
+
 	}
 
 
@@ -936,21 +988,32 @@ int main ()
 	int seats[] = { 1,2,3,4,5,6,6,7,8,10 };
 	/*string buildings[] = { " la " , "s"};*/
 	cout << endl;
-Location e2(12, "Vienna" , "Theater ", seats, 10, Areas::FrontSeats);
-cout << e2;   //   << operator c
+Location e2(12, "Vienna" , "Theater", seats, 10, Areas::FrontSeats);
+cout << e2;   //   << operator 
+cout << "Operator += : " << endl;
 cout << endl;
+char building[] {"grand theater"}; // to UPPER CASE
+cout << e2.toUpperCase(building);
 //cin >> e2; // >> operator
 cout << endl;
 Location e4 = e2; // op =
 cout << endl;
 cout << e4;
+cout << endl;
+if (e4 > e2)  // > operator
+{
+	cout << "e4 has more rows than e2";
+
+}
+else
+cout << "e2 has more rows than e4";
 Location e3(e2); // copy constr
 cout << endl;
 
 cout << e3;
 cout << endl;
 
-//e2 + 3;  // + operator
+
 cout << endl;
 
 cout << e2;

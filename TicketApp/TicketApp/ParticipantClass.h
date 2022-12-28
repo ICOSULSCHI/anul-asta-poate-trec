@@ -182,3 +182,30 @@ istream& operator>>(istream& in, Participant& pr)
 	in >> pr.nr_of_events_attended;
 	return in;
 }
+
+class Student : public Participant
+{
+private: 
+
+	int height=0;
+	int telephoneNr = 0;
+public: 
+	Student() : height(0), telephoneNr(0)
+	{
+		cout << "Calling default constructor"; 
+    }
+	Student(int height, int telephoneNr)
+	{
+		if(this->height<0)
+		{
+			throw "Wrong number ";
+		}
+		this->height = height;
+		if (this->telephoneNr < 5)
+		{
+			throw "Wrong number ";
+		}
+		this->telephoneNr = telephoneNr;
+	}
+
+};

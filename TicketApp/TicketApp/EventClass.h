@@ -212,6 +212,7 @@ istream& operator>>(istream& in, Event& v)
 	in >> v.date_time;
 
 
+ 
 	cout << "Introduce the total amount of tickets available: "; in >> v.total_amount_of_tickets_available;
 	//cout << "Set the event type : "; in >> v.type;
 	cout << " Say if the event has a sponsor "; in >> v.hasSponsor;

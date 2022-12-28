@@ -183,18 +183,18 @@ istream& operator>>(istream& in, Participant& pr)
 	return in;
 }
 
-class Student : public Participant
+class student : public Participant
 {
 private: 
 
 	int height=0;
 	int telephoneNr = 0;
 public: 
-	Student() : height(0), telephoneNr(0)
+	student() : height(0), telephoneNr(0)
 	{
 		cout << "Calling default constructor"; 
     }
-	Student(int height, int telephoneNr)
+	student(int height, int telephoneNr)
 	{
 		if(this->height<0)
 		{
@@ -207,5 +207,84 @@ public:
 		}
 		this->telephoneNr = telephoneNr;
 	}
+	student(const student& s) : Participant(s)
+	{
+		if (this->height < 0)
+		{
+			throw "Wrong number ";
+		}
+		this->height = s.height;
+		if (this->telephoneNr < 5)
+		{
+			throw "Wrong number ";
+		}
+		this->telephoneNr = s.telephoneNr;
+	}
+	student& operator= (const student& s)
+	{
+		student::operator=(s);
+		if (this != &s)
+		{
+			if (this->height < 0)
+			{
+				throw "Wrong number ";
+			}
+			this->height = s.height;
+			if (this->telephoneNr < 5)
+			{
+				throw "Wrong number ";
+			}
+			this->telephoneNr = s.telephoneNr;
+		}
+		return *this;
+	}
+	
+	int getHeight()
+	{
+		return this->height;
+	}
 
+	int getPhone()
+	{
+		return this->telephoneNr;
+	}
+
+	void setHeight(int h)
+	{
+		if (this->height < 0)
+		{
+			throw "Wrong number ";
+		}
+		this->height = h;
+	}
+	void setPhoneNr(int nr)
+	{
+		if (this->telephoneNr < 5)
+		{
+			throw "Wrong number ";
+		}
+		this->telephoneNr = nr;
+	}
+	friend ostream& operator<< (ostream& out, const student& s);
+	friend istream& operator>> (istream& in, student& s);
+
+	
 };
+
+ostream& operator<< (ostream& out, const student& s)
+{
+	out << (Participant)s << endl;
+	out << "Student's height is : " << s.height << endl;
+	out << "Student's phone number is: " << s.telephoneNr << endl;
+	return out;
+}
+
+istream& operator>> (istream& in, student& s)
+{
+	cout << (Participant)s;
+	cout << "Student's height: "; 
+	in >> s.height;
+	cout << "Student's phone number: ";
+	in >> s.telephoneNr;
+    
+}

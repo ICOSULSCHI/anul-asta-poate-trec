@@ -141,7 +141,10 @@ public:
 
 	// 2 GENERIC METHODS 
 
-
+	virtual void class_interogation()
+	{
+		cout << " Main class - > Participant" << endl;
+	}
 
 
 	friend ostream& operator<<(ostream& out, const Participant& pa);
@@ -190,41 +193,45 @@ private:
 	int height=0;
 	int telephoneNr = 0;
 public: 
-	student() : height(0), telephoneNr(0)
+	student() :Participant(), height(0), telephoneNr(0)
 	{
 		cout << "Calling default constructor"; 
     }
-	student(int height, int telephoneNr)
+	student(int participantID, string name, int age, bool over18, ParticipantCategory category, int nr_of_events_attended, int height, int telephoneNr):
+		Participant (participantID, name, age, over18, category, nr_of_events_attended),
+		height(0), telephoneNr(0)
+
 	{
 		if(this->height<0)
 		{
 			throw "Wrong number ";
 		}
 		this->height = height;
-		if (this->telephoneNr < 5)
+		this->telephoneNr = telephoneNr;
+		if ((this->telephoneNr / 10000) < 1)
 		{
 			throw "Wrong number ";
 		}
-		this->telephoneNr = telephoneNr;
 	}
-	student(const student& s) : Participant(s)
+	student(const student& s) : Participant(s), height(0), telephoneNr(0)
 	{
 		if (this->height < 0)
 		{
 			throw "Wrong number ";
 		}
 		this->height = s.height;
+		this->telephoneNr = s.telephoneNr;
 		if (this->telephoneNr < 5)
 		{
 			throw "Wrong number ";
 		}
-		this->telephoneNr = s.telephoneNr;
 	}
 	student& operator= (const student& s)
 	{
-		student::operator=(s);
 		if (this != &s)
 		{
+			student::operator=(s);
+
 			if (this->height < 0)
 			{
 				throw "Wrong number ";
@@ -268,23 +275,28 @@ public:
 	friend ostream& operator<< (ostream& out, const student& s);
 	friend istream& operator>> (istream& in, student& s);
 
+	 void class_interogation() override
+	{
+		cout << " Derived class -> student " << endl;
+	}
 	
 };
 
 ostream& operator<< (ostream& out, const student& s)
 {
-	out << (Participant)s << endl;
-	out << "Student's height is : " << s.height << endl;
+	out << endl << (Participant)s << endl;
+	out << "Student's height is : " << s.height << "cm" << endl;
 	out << "Student's phone number is: " << s.telephoneNr << endl;
 	return out;
 }
 
 istream& operator>> (istream& in, student& s)
 {
+	in >> (Participant&)s; cout << endl;
 	cout << (Participant)s;
 	cout << "Student's height: "; 
 	in >> s.height;
 	cout << "Student's phone number: ";
 	in >> s.telephoneNr;
-    
+	return in;
 }

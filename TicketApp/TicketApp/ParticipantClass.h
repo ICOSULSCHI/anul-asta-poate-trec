@@ -5,7 +5,13 @@ using namespace std;
 
 enum ParticipantCategory { Child, Student, Adult, Senior };
 
-class Participant
+class I_Participant
+{
+public:
+	virtual ~I_Participant() = default;
+	virtual void class_interogation() = 0;
+};
+class Participant : I_Participant
 {
 private:
 	const int participantID;
@@ -133,7 +139,7 @@ public:
 		Participant copy = *this;
 		this->age++;
 		return copy;
-	}
+	} 
 	operator string()
 	{
 		return this->name;
@@ -141,11 +147,11 @@ public:
 
 	// 2 GENERIC METHODS 
 
-	virtual void class_interogation()
+	virtual void class_interogation() override
 	{
 		cout << " Main class - > Participant" << endl;
 	}
-
+	//virtual void class_interogation() = 0; // pure virtual function
 
 	friend ostream& operator<<(ostream& out, const Participant& pa);
 	friend istream& operator>>(istream& in, Participant& pr);
@@ -281,6 +287,7 @@ public:
 	}
 	
 };
+
 
 ostream& operator<< (ostream& out, const student& s)
 {

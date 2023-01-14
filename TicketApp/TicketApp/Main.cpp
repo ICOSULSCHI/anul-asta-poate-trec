@@ -122,6 +122,13 @@ cout << endl;
 	Participant* participant = new student(Vijai);
 	participant->class_interogation(); // (*participant).class_interogation()
 	cout << "============================================================================================" << endl;
+	participant->addSecondName("Costin");
+	cout << endl;
+
+	cout << " ==================================================================" << endl;
+	cout << "\n";
+	participant->checkAge(34);
+	cout << endl;
 	//cout << " TICKET CLASS  " << endl;
 
 	//Ticket t1;

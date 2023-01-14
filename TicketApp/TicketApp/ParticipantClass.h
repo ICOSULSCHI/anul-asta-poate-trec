@@ -10,10 +10,14 @@ class I_Participant
 public:
 	virtual ~I_Participant() = default;
 	virtual void class_interogation() = 0;
+	virtual string addSecondName(string secondName) = 0;
+	virtual int checkAge(int age) = 0;
+
+
 };
 class Participant : I_Participant
 {
-private:
+protected:
 	const int participantID;
 	string name;
 	int age;
@@ -153,6 +157,22 @@ public:
 	}
 	//virtual void class_interogation() = 0; // pure virtual function
 
+	virtual string addSecondName(string secondName)
+	{
+		cout << "Participant's second name is : " << secondName;
+		return secondName;
+	}
+
+	virtual int checkAge(int age)
+	{
+		if (age >= 31)
+		{
+			cout <<  "The individual is not eligible for student price ";
+		}
+		return 0;
+	}
+
+
 	friend ostream& operator<<(ostream& out, const Participant& pa);
 	friend istream& operator>>(istream& in, Participant& pr);
 
@@ -286,6 +306,20 @@ public:
 		cout << " Derived class -> student " << endl;
 	}
 	
+	  string addSecondName( string secondName) override
+	 {
+		 cout << "Student's second name is : " << secondName;
+		 return secondName;
+	 }
+	
+	  int checkAge(int age) override
+	  {
+		  if (age >= 31)
+		  {
+			  cout << "The individual is not eligible for student price ";
+		  }
+		  return 0;
+	  }
 };
 
 

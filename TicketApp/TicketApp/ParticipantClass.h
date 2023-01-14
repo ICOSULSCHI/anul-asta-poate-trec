@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string.h>
+#include <fstream>
 using namespace std;
 
 enum ParticipantCategory { Child, Student, Adult, Senior };
@@ -167,7 +168,7 @@ public:
 	{
 		if (age >= 31)
 		{
-			cout <<  "The individual is not eligible for student price ";
+			cout <<  "The Participant is not eligible for student price ";
 		}
 		return 0;
 	}
@@ -175,7 +176,23 @@ public:
 
 	friend ostream& operator<<(ostream& out, const Participant& pa);
 	friend istream& operator>>(istream& in, Participant& pr);
-
+	friend ofstream& operator<<(ofstream& out, const Participant& pa)
+	{
+		out.write((char*)&pa.name, sizeof(string));
+		out.write((char*)&pa.age, sizeof(int));
+		out.write((char*)&pa.over18, sizeof(bool));
+		out.write((char*)& pa.category, sizeof(Participant));
+		out.write((char*)& pa.nr_of_events_attended, sizeof(int));
+	}
+	friend ifstream& operator>>(ifstream& in, Participant& pa)
+	{
+		in.read((char*)&pa.name, sizeof(string));
+		in.read((char*)&pa.age, sizeof(int));
+		in.read((char*)&pa.over18, sizeof(bool));
+		in.read((char*)&pa.category, sizeof(Participant));
+		in.read((char*)&pa.nr_of_events_attended, sizeof(int));
+	}
+	
 
 };
 int MIN_NAME_SIZE = 2;
@@ -211,6 +228,8 @@ istream& operator>>(istream& in, Participant& pr)
 	in >> pr.nr_of_events_attended;
 	return in;
 }
+
+
 
 class student : public Participant
 {
@@ -300,6 +319,7 @@ public:
 	}
 	friend ostream& operator<< (ostream& out, const student& s);
 	friend istream& operator>> (istream& in, student& s);
+	
 
 	 void class_interogation() override
 	{
@@ -316,7 +336,7 @@ public:
 	  {
 		  if (age >= 31)
 		  {
-			  cout << "The individual is not eligible for student price ";
+			  cout << "The individual is over 31 years and not eligible for student price ";
 		  }
 		  return 0;
 	  }
@@ -341,3 +361,4 @@ istream& operator>> (istream& in, student& s)
 	in >> s.telephoneNr;
 	return in;
 }
+

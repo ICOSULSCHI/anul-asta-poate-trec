@@ -129,6 +129,33 @@ cout << endl;
 	cout << "\n";
 	participant->checkAge(34);
 	cout << endl;
+	cout << endl;
+	cout << " BINARY FILE TEST  =======================================================" << endl;
+	cout << endl;
+	ofstream writing("WritingParticipantFromBinaryFile.bin", ios::out | ios::binary);
+		if (writing.is_open())
+		{
+			writing << participant;
+			writing.close();
+		}
+		else
+		{
+			cout << " Not able to open the file " << endl;
+
+		}
+
+		ifstream reading("ParticipantData.bin", ios::in | ios::binary);
+		if (reading.is_open())
+		{
+			reading.close();
+
+		}
+		else
+		{
+			cout << "Not able to open the file " << endl;
+		}
+
+		cout << participant;
 	//cout << " TICKET CLASS  " << endl;
 
 	//Ticket t1;

@@ -3,6 +3,7 @@
 #include "ParticipantClass.h"
 #include "LocationClass.h"
 #include "TicketClass.h"
+#include <vector>
 //
 using namespace std;
 int main()
@@ -175,5 +176,10 @@ cout << endl;
 	//cout << "Nr of agents that worked for a ticket " << (int)t2 << endl;  // operator int()
 	//cin >> t2; // operator >>
 
+		cout << "=================STL=======================";
+	
+		cout << endl;
+
+		add(1, 2.3)
 return 0;
 }

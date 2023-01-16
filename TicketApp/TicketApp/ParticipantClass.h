@@ -211,6 +211,7 @@ ostream& operator<< (ostream& out, const Participant& pa)
 	return out;
 }
 
+
 istream& operator>>(istream& in, Participant& pr)
 {
 	cout << "Introduce the name of the Participant: ";
@@ -231,33 +232,33 @@ istream& operator>>(istream& in, Participant& pr)
 	return in;
 }
 
-class studentSTL
-{
-private:
-	vector <Participant>student;
-public:
-	studentSTL(vector <Participant>student) :student()
-	{
-		for (const Participant& p : student)
-		{
-			this->student.push_back(p);
-		}
-	}
-	studentSTL& operator+=(const Participant& p)
-	{
-		this->student.push_back(p);
-		return *this;
-
-	}
-	friend ostream& operator<<(ostream& out, const studentSTL& s)
-	{
-		for (const Participant& p : s.student)
-		{
-			out << p;
-		}
-		return out;
-	}
-};
+//class studentSTL
+//{
+//private:
+//	vector <Participant>student;
+//public:
+//	studentSTL(vector <Participant>student) :student()
+//	{
+//		for (const Participant& p : student)
+//		{   
+//			this->student.push_back(p);
+//		}
+//	}
+//	studentSTL& operator+=(const Participant& p)
+//	{
+//		this->student.push_back(p);
+//		return *this;
+//
+//	}
+//	friend ostream& operator<<(ostream& out, const studentSTL& s)
+//	{
+//		for (const Participant& p : s.student)
+//		{
+//			out << p;
+//		}
+//		return out;
+//	}
+//};
 
 class student : public Participant
 {
@@ -390,7 +391,9 @@ istream& operator>> (istream& in, student& s)
 	return in;
 }
 
-void add(int a, int b)
+template <typename T, typename Z >
+void add(T a, Z b)
 {
 	cout << a + b;
 }
+

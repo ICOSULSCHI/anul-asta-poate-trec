@@ -184,6 +184,7 @@ public:
 
 	}
 
+
 	// Average price for a ticket
 	void AveragePriceForATicket(float* prices)
 	{

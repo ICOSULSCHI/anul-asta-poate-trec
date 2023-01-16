@@ -199,6 +199,7 @@ public:
 
 		this->nr_rows = nr_rows;
 
+
 	}
 
 	// 2 generic methods ////

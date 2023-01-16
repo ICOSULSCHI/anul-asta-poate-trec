@@ -197,6 +197,7 @@ ostream& operator<< (ostream& out, const Event& e)
 	return out;
 
 }
+
 istream& operator>>(istream& in, Event& v)
 {
 	cout << "Introduce the event name : ";
